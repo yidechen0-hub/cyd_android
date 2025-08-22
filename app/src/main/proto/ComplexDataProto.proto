@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+// 生成的 Java 类的包路径（需与项目包名对应，避免冲突）
+option java_package = "com.cyd.cyd_android.serialization";
+// 生成的外层类名（可选，默认以文件名首字母大写命名）
+option java_outer_classname = "ComplexDataProtoClass";
+
+message ComplexDataProto {
+    int64 id = 1;
+    string name = 2;
+    int64 timestamp = 3;
+    bool is_valid = 4;
+    bytes byte_data = 5;
+    repeated string string_list = 6;
+    repeated NestedDataProto nested_data = 7;
+}
+
+message NestedDataProto {
+    int32 nested_id = 1;
+    string nested_name = 2;
+    repeated double values = 3;
+    SubNestedDataProto sub_nested = 4;
+}
+
+message SubNestedDataProto {
+    bool flag = 1;
+    string code = 2;
+    repeated int32 numbers = 3;
+}
