@@ -3,6 +3,7 @@ package com.cyd.cyd_android.activity
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -50,11 +51,26 @@ class SerializationActivity:AppCompatActivity() {
 
     fun runCrossProcessTests(context: Context) {
 
-        // 运行跨进程通信测试
+//        // 运行跨进程通信测试
         val crossProcessTester = CrossProcessTester()
-        crossProcessTester.bindService(context)
-        // 等待服务绑定完成后调用
-        crossProcessTester.runCrossProcessTests()
+//        crossProcessTester.bindService(context)
+//        // 等待服务绑定完成后调用
+//        crossProcessTester.runCrossProcessTests()
+        // 例如在Activity的lifecycleScope中
+        lifecycleScope.launch {
+            try {
+                // 1. 挂起等待服务绑定成功（失败会抛异常）
+                crossProcessTester.bindServiceSuspend(this@SerializationActivity)
+
+                // 2. 绑定成功后，执行测试（此时isBound一定为true）
+                crossProcessTester.runCrossProcessTests()
+            } catch (e: Exception) {
+                Log.e("Client", "服务绑定或测试失败", e)
+            } finally {
+                // 3. 测试完成后，解绑服务（可选，根据需求决定是否保持绑定）
+//                crossProcessTester.unbindService(this@MainActivity)
+            }
+        }
     }
 
 

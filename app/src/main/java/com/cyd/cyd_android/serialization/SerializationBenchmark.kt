@@ -52,7 +52,7 @@ class SerializationBenchmark {
             Log.d(TAG, "实际数据大小: ${formatSize(actualSize.toLong())}}")
             
             // 执行各种序列化方法的测试
-//            testGsonSerialization(testData, size)
+            testGsonSerialization(testData, size)
 //            testParcelableSerialization(testData, size)
             testProtobufSerialization(testData, size)
         }

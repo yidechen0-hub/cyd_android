@@ -2,17 +2,23 @@ package com.cyd.cyd_android.serialization
 
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
 import android.util.Log
 import com.google.gson.Gson
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 class CrossProcessTester {
     private val TAG = "CrossProcessTester"
     private var messenger: Messenger? = null
     private var isBound = false
     private val results = mutableListOf<CrossProcessResult>()
+
+    private var serviceConnection: ServiceConnection? = null
     
     data class CrossProcessResult(
         val dataSize: String,
@@ -20,37 +26,83 @@ class CrossProcessTester {
         val method: String,
         val totalTimeMs: Long
     )
-    
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            messenger = Messenger(service)
-            isBound = true
-            Log.d(TAG, "服务已连接，开始跨进程测试")
+
+
+
+    // 1. 协程挂起函数：绑定服务并等待绑定成功（失败则抛异常）
+    suspend fun bindServiceSuspend(context: Context) = suspendCancellableCoroutine<Unit> { continuation ->
+        val serviceConnection = object : ServiceConnection {
+            override fun onServiceConnected(className: ComponentName, service: IBinder) {
+                messenger = Messenger(service)
+                isBound = true
+                Log.d(TAG, "服务已连接")
+
+                // 绑定成功，恢复协程
+                continuation.resume(Unit)
+            }
+
+            override fun onServiceDisconnected(arg0: ComponentName) {
+                isBound = false
+                messenger = null
+                Log.d(TAG, "服务已断开连接")
+
+                // 若协程未完成，通知断开（可选）
+                if (continuation.isActive) {
+                    continuation.resumeWithException(IllegalStateException("服务意外断开"))
+                }
+            }
         }
-        
-        override fun onServiceDisconnected(arg0: ComponentName) {
-            isBound = false
-            messenger = null
-            Log.d(TAG, "服务已断开连接")
-        }
-    }
-    
-    fun bindService(context: android.content.Context) {
+
+        // 保存连接实例，用于协程取消时解绑服务
+        this.serviceConnection = serviceConnection
+
+        // 绑定服务
         val intent = Intent(context, TestService::class.java)
-        context.bindService(intent, serviceConnection, android.content.Context.BIND_AUTO_CREATE)
-    }
-    
-    fun unbindService(context: android.content.Context) {
-        if (isBound) {
-            context.unbindService(serviceConnection)
-            isBound = false
+        val bindSuccess = context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        if (!bindSuccess) {
+            // 绑定失败，直接抛异常
+            continuation.resumeWithException(IllegalStateException("服务绑定失败"))
+        }
+
+        // 2. 协程取消时，解绑服务（避免内存泄漏）
+        continuation.invokeOnCancellation {
+            if (isBound) {
+                context.unbindService(serviceConnection)
+                isBound = false
+            }
         }
     }
+    
+//    private val serviceConnection = object : ServiceConnection {
+//        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+//            messenger = Messenger(service)
+//            isBound = true
+//            Log.d(TAG, "服务已连接，开始跨进程测试")
+//        }
+//
+//        override fun onServiceDisconnected(arg0: ComponentName) {
+//            isBound = false
+//            messenger = null
+//            Log.d(TAG, "服务已断开连接")
+//        }
+//    }
+//
+//    fun bindService(context: android.content.Context) {
+//        val intent = Intent(context, TestService::class.java)
+//        context.bindService(intent, serviceConnection, android.content.Context.BIND_AUTO_CREATE)
+//    }
+    
+//    fun unbindService(context: android.content.Context) {
+//        if (isBound) {
+//            context.unbindService(serviceConnection)
+//            isBound = false
+//        }
+//    }
     
     fun runCrossProcessTests() {
-        if (!isBound || messenger == null) {
+        while (!isBound || messenger == null) {
             Log.e(TAG, "服务未连接，无法进行测试")
-            return
+            Thread.sleep(100)
         }
         
         Log.d(TAG, "开始执行跨进程通信测试...")
@@ -63,8 +115,8 @@ class CrossProcessTester {
             val testData = DataGenerator.generateComplexData(size)
             
             // 执行各种序列化方法的跨进程测试
-            testGsonCrossProcess(testData, size)
-            testParcelableCrossProcess(testData, size)
+//            testGsonCrossProcess(testData, size)
+//            testParcelableCrossProcess(testData, size)
             testProtobufCrossProcess(testData, size)
         }
         

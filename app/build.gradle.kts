@@ -40,13 +40,8 @@ android {
         getByName("main") {
             java {
                 srcDirs("src/main/java/com/cyd/cyd_android/serialization")
-                // 添加Protobuf生成的代码目录作为源码集
-//                srcDir("$project.buildDir/generated/source/proto/main/java")
             }
-//            proto {
-//                srcDirs("src/main/proto")
-//
-//            }
+
         }
     }
 
