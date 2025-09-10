@@ -4,6 +4,7 @@ plugins {
 //    id("com.google.protobuf")
 //    alias(libs.plugins.protobuf)
     id("com.google.protobuf") version "0.9.4"
+//    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -83,5 +84,7 @@ dependencies {
     // 使用与protoc匹配的版本
     implementation("com.google.protobuf:protobuf-java:3.24.4")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
 }

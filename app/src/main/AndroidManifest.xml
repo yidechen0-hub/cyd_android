@@ -35,6 +35,13 @@
 
         <activity
             android:name=".activity.SerializationActivity"
+            android:exported="true" />
+
+
+        <activity android:name=".activity.GetSysLanguageActivity"
+            android:exported="true"/>
+
+        <activity android:name=".activity.RecyclerViewActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
