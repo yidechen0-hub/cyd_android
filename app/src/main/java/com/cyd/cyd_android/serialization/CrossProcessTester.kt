@@ -109,6 +109,7 @@ class CrossProcessTester {
         
         // 测试所有数据大小档位
         for (size in DataGenerator.DataSize.values()) {
+//            val size_tmp = DataGenerator.DataSize.values()[5]
             Log.d(TAG, "开始跨进程测试数据大小: ${DataGenerator.formatSize(size.sizeInBytes)}")
             
             // 生成测试数据
@@ -118,10 +119,12 @@ class CrossProcessTester {
 //            testGsonCrossProcess(testData, size)
 //            testParcelableCrossProcess(testData, size)
             testProtobufCrossProcess(testData, size)
+//            break
         }
         
         // 打印汇总结果
         printCrossProcessResults()
+
     }
     
     private fun testGsonCrossProcess(data: ComplexData, size: DataGenerator.DataSize) {
@@ -248,7 +251,7 @@ class CrossProcessTester {
             bundle.putByteArray(TestService.EXTRA_DATA, bytes)
             msg.data = bundle
             msg.replyTo = replyMessenger
-            
+//            Log.d(TAG, "开始发送 Protobuf 数据: ${bytes.size} bytes")
             startTime = System.currentTimeMillis()
             messenger?.send(msg)
         } catch (e: RemoteException) {
@@ -268,3 +271,5 @@ class CrossProcessTester {
         }
     }
 }
+
+

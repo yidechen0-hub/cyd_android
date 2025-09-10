@@ -9,12 +9,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.cyd.cyd_android.R
+import com.cyd.cyd_android.serialization.ComplexDataProtoClass
 import com.cyd.cyd_android.serialization.CrossProcessTester
+import com.cyd.cyd_android.serialization.DataGenerator
 import com.cyd.cyd_android.serialization.SerializationBenchmark
+import com.cyd.cyd_android.serialization.UserProto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.system.measureNanoTime
 
 class SerializationActivity:AppCompatActivity() {
 
@@ -23,6 +27,8 @@ class SerializationActivity:AppCompatActivity() {
         setContentView(R.layout.activity_serialization)
         val SerializationBenchmarksBtn = findViewById<Button>(R.id.SerializationBenchmarks_btn)
         val CrossProcessTestsBtn = findViewById<Button>(R.id.CrossProcessTests_btn)
+        val TestUserDataBtn = findViewById<Button>(R.id.TestUserData_btn)
+        val TestComplexDataBtn = findViewById<Button>(R.id.TestComplexData_btn)
         SerializationBenchmarksBtn.setOnClickListener {
             // 从 UI 线程启动协程
             lifecycleScope.launch(Dispatchers.IO) {
@@ -40,6 +46,69 @@ class SerializationActivity:AppCompatActivity() {
         CrossProcessTestsBtn.setOnClickListener {
 
             runCrossProcessTests(this)
+        }
+        TestUserDataBtn.setOnClickListener {
+            val iterations = 10000
+
+            // 构建一个 User 对象
+            val user = UserProto.User.newBuilder()
+                .setId(123)
+                .setName("Alice")
+                .setEmail("alice@example.com")
+                .build()
+
+            // 序列化测试
+            val serializeTime = measureNanoTime {
+                repeat(iterations) {
+                    user.toByteArray()
+                }
+            }
+            val avgSerializeTime = serializeTime / iterations.toDouble()
+
+            // 先准备一个序列化的字节数组
+            val serialized = user.toByteArray()
+
+            // 反序列化测试
+            val deserializeTime = measureNanoTime {
+                repeat(iterations) {
+                    UserProto.User.parseFrom(serialized)
+                }
+            }
+            val avgDeserializeTime = deserializeTime / iterations.toDouble()
+
+            Log.d("ProtoPerf", "序列化平均耗时 = $avgSerializeTime ns")
+            Log.d("ProtoPerf", "反序列化平均耗时 = $avgDeserializeTime ns")
+        }
+
+        TestComplexDataBtn.setOnClickListener {
+            val iterations = 10
+            val data = DataGenerator.generateComplexData(DataGenerator.DataSize.SIZE_2MB)
+            val protoData = DataGenerator.convertToProto(data)
+            repeat(5) {
+                protoData.toByteArray()
+            }
+            // 序列化测试
+            val serializeTime = measureNanoTime {
+                repeat(iterations) {
+                    protoData.toByteArray()
+                }
+            }
+            val avgSerializeTime = serializeTime / iterations.toDouble()
+
+            // 先准备一个序列化的字节数组
+            val serialized = protoData.toByteArray()
+            repeat(5) {
+                ComplexDataProtoClass.ComplexDataProto.parseFrom(serialized)
+            }
+            // 反序列化测试
+            val deserializeTime = measureNanoTime {
+                repeat(iterations) {
+                    ComplexDataProtoClass.ComplexDataProto.parseFrom(serialized)
+                }
+            }
+            val avgDeserializeTime = deserializeTime / iterations.toDouble()
+            Log.d("ProtoPerf", "序列化平均耗时 = ${avgSerializeTime/1000000.0} ms" )
+            Log.d("ProtoPerf", "反序列化平均耗时 = ${avgDeserializeTime/1000000.0} ms" )
         }
 
     }

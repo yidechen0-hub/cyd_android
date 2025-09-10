@@ -74,7 +74,7 @@ class TestService : Service() {
     private fun handleProtobufMessage(msg: Message): Boolean {
         val bytes = msg.data.getByteArray(EXTRA_DATA) ?: return false
         val replyTo = msg.replyTo
-        
+        Log.d(TAG, "收到Protobuf数据，长度：${bytes.size}字节")
         // 反序列化
         val startTime = System.nanoTime()
         val protoData = ComplexDataProtoClass.ComplexDataProto.parseFrom(bytes)
