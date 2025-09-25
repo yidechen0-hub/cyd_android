@@ -1,27 +1,20 @@
-package com.cyd.cyd_android.plugin
+package com.cyd.pluginframework
 
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.os.Build
-import com.cyd.pluginframework.IPlugin
-//import com.cyd.pluginframework.PluginContext
-import com.cyd.pluginframework.HostConstants
-import com.cyd.pluginframework.PluginInfo
-import dalvik.system.DexClassLoader
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.gson.Gson
+import dalvik.system.DexClassLoader
 import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
-import androidx.appcompat.app.AppCompatActivity
 
 class PluginManager(private val hostContext: Activity) {
     // 插件缓存：key为pluginId，value为插件信息
@@ -64,10 +57,6 @@ class PluginManager(private val hostContext: Activity) {
             val isCreated = pluginsDir.mkdirs()
             if (!isCreated) {
                 Log.e("PluginManager", "目录创建失败！请检查权限")
-//                // 检查是否缺少权限（仅低版本需要）
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-//                    checkStoragePermission() // 调用权限检查方法
-//                }
                 return
             } else {
                 Log.d("PluginManager", "目录创建成功")

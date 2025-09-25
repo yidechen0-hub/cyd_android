@@ -1,4 +1,4 @@
-package com.cyd.cyd_android.plugin
+package com.cyd.pluginframework
 
 import android.app.Activity
 import android.content.Context
@@ -7,8 +7,6 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.widget.Toast
-import com.cyd.pluginframework.PluginContext
-import com.cyd.cyd_android.plugin.PluginManager  // 确保导入正确的PluginManager
 
 /**
  * 修复后的HostPluginContext：实现PluginContext接口的所有抽象方法
@@ -49,7 +47,7 @@ class HostPluginContext(
             setPackage(hostActivity.packageName) // 主应用包名
             extras?.let { putExtras(it) }
             // 若宿主不是Activity，添加NEW_TASK flag
-            if (hostActivity !is android.app.Activity) {
+            if (hostActivity !is Activity) {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
         }
@@ -62,7 +60,7 @@ class HostPluginContext(
     }
 
     override fun requestPermission(permission: String, callback: PluginContext.PermissionCallback) {
-        if (hostActivity is android.app.Activity) {
+        if (hostActivity is Activity) {
             // 修复2：调用PluginManager的requestPermission方法（确保PluginManager有该方法）
             pluginManager.requestPermission(
                 permission = permission,
@@ -98,7 +96,7 @@ class HostPluginContext(
         return theme
     }
 
-    override fun getHostActivity(): android.app.Activity? {
+    override fun getHostActivity(): Activity? {
         return if (!hostActivity.isFinishing && !hostActivity.isDestroyed) {
             hostActivity
         } else {

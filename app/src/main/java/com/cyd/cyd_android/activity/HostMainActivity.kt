@@ -1,22 +1,19 @@
 package com.cyd.cyd_android.activity
 
-import android.R.attr.textColor
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.Gravity
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.cyd.cyd_android.plugin.PluginManager
+import com.cyd.pluginframework.PluginManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import java.io.File
 import com.cyd.cyd_android.R
-import android.widget.FrameLayout
 
 class HostMainActivity : AppCompatActivity(), PluginManager.PermissionRequestDelegate {
     private lateinit var pluginManager: PluginManager
