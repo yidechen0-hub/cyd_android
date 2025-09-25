@@ -1,0 +1,7 @@
+{
+  "pluginName": "设备信息插件",
+  "pluginId": "device_info",
+  "version": "1.0.0",
+  "mainClass": "com.cyd.deviceinfoplugin.DeviceInfoPlugin",
+  "description": "获取设备硬件信息的插件"
+}

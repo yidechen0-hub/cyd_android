@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/host_bg">
+
+    <!-- 标题栏区域 -->
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="插件管理中心"
+    android:textSize="22sp"
+    android:textStyle="bold"
+    android:paddingBottom="16dp"/>
+
+        <!-- 刷新按钮 -->
+    <Button
+    android:id="@+id/btn_refresh"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="刷新插件列表"
+    android:layout_marginBottom="16dp"/>
+
+        <!-- 插件列表容器 -->
+    <ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1">
+
+    <LinearLayout
+        android:id="@+id/plugin_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:spacing="12dp"/>
+    </ScrollView>
+
+    <!-- 插件布局容器：必须有明确的id，供插件查找并添加布局 -->
+    <FrameLayout
+        android:id="@+id/plugin_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FFFFFF"/>
+
+</LinearLayout>

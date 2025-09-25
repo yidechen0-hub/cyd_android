@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="host_bg">#F5F7FA</color> <!-- 宿主背景色（浅灰） -->
+    <color name="host_title_color">#2D3748</color> <!-- 标题色（深灰） -->
+    <color name="host_btn_primary">#3182CE</color> <!-- 主按钮色（蓝色） -->
+    <color name="host_btn_secondary">#38A169</color> <!-- 次要按钮色（绿色） -->
+    <color name="host_text_primary">#2D3748</color> <!-- 主要文本色 -->
+    <color name="host_text_secondary">#718096</color> <!-- 次要文本色（浅灰） -->
+    <color name="white">#FFFFFF</color>
 </resources>

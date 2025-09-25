@@ -2,6 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"
+        tools:ignore="SelectedPhotoAccess" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_AUDIO"
+        tools:ignore="SelectedPhotoAccess" />
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_VIDEO"
+        tools:ignore="SelectedPhotoAccess" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:largeHeap="true"
         android:allowBackup="true"
@@ -42,19 +62,25 @@
             android:exported="true"/>
 
         <activity android:name=".activity.RecyclerViewActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".activity.HostMainActivity"
+            android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+
 
 
 
 
         <service android:name=".serialization.TestService"
             android:exported="true" />
+
+
 
 
     </application>

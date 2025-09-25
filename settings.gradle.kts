@@ -17,8 +17,9 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
     }
-}
 
+}
 rootProject.name = "cyd_android"
 include(":app")
- 
+include(":deviceinfoplugin")
+include(":pluginframework")

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/host_plugin_item_bg"
+    android:padding="12dp"
+    android:layout_marginHorizontal="4dp">
+
+    <!-- 插件信息区域（占满左侧空间） -->
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:gravity="start">
+
+    <!-- 插件名称 -->
+    <TextView
+        android:id="@+id/tv_plugin_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设备信息插件"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/host_text_primary"/>
+
+    <!-- 插件版本 -->
+    <TextView
+        android:id="@+id/tv_plugin_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="版本：1.0.0"
+        android:textSize="14sp"
+        android:textColor="@color/host_text_secondary"
+        android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+        <!-- 启动插件按钮（右侧固定） -->
+    <Button
+    android:id="@+id/btn_start_plugin"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="启动"
+    android:backgroundTint="@color/host_btn_secondary"
+    android:textColor="@color/white"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="6dp"
+    android:layout_marginLeft="12dp"/>
+
+</LinearLayout>
